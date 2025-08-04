@@ -14,9 +14,14 @@ services:
     depends_on:
       - tidb
     volumes:
-      - ./db/db.sql:/docker-entrypoint-initdb.d/db.sql
+      - ./db/init.sql:/docker-entrypoint-initdb.d/db.sql
       - ./db/init-db.sh:/init-db.sh
-    entrypoint: ["/init-db.sh"]
+    entrypoint: ["sh", "/init-db.sh"]
+    tty: true
+
+
+
+
 
   zookeeper:
     image: confluentinc/cp-zookeeper:7.6.0
