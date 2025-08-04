@@ -100,11 +100,14 @@ curl -X POST http://localhost:3000/login \
   -d '{"email": "user@example.com", "password": "pass123"}'
 
 ```
-
+- See Kafka topic of the CDC
+``` bash
+docker exec -it helfy-kafka-1 bash
+kafka-topics --bootstrap-server localhost:9092 --list
+```
 ---
 # CleanUp
 ```
 docker compose down
 ```
-
 
