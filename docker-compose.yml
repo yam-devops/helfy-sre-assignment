@@ -63,6 +63,17 @@ services:
     depends_on:
       - kafka
 
+
+  frontend:
+    build: ./client
+    ports:
+      - "8080:80"
+    depends_on:
+      - backend
+
+
+
+
 volumes:
   tidb_data:
 
