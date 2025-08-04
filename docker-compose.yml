@@ -1,14 +1,23 @@
 version: '3.8'
 
 services:
+  
+
   tidb:
     image: pingcap/tidb:latest
+    command:
+      - --store=tikv
+      - --path=pd:2379
+    depends_on:
+      - pd
+      - tikv
     ports:
       - "4000:4000"
       - "10080:10080"
-    volumes:
-      - tidb_data:/data
-  
+
+
+
+
   initdb:
     image: mysql:8
     depends_on:
@@ -18,6 +27,66 @@ services:
       - ./db/init-db.sh:/init-db.sh
     entrypoint: ["sh", "/init-db.sh"]
     tty: true
+
+
+
+
+  pd:
+    image: pingcap/pd:latest
+    command:
+      - --name=pd
+      - --data-dir=/data/pd
+      - --client-urls=http://0.0.0.0:2379
+      - --peer-urls=http://0.0.0.0:2380
+      - --initial-cluster=pd=http://pd:2380
+      - --advertise-client-urls=http://pd:2379
+      - --advertise-peer-urls=http://pd:2380
+    ports:
+      - "2379:2379"
+      - "2380:2380"
+    volumes:
+      - pd_data:/data/pd
+
+
+  tikv:
+    image: pingcap/tikv:latest
+    command:
+      - --addr=0.0.0.0:20160
+      - --pd=pd:2379
+      - --advertise-addr=tikv:20160
+      - --data-dir=/data/tikv
+    depends_on:
+      - pd
+    ports:
+      - "20160:20160"
+    volumes:
+      - tikv_data:/data/tikv
+
+
+
+  ticdc:
+    image: pingcap/ticdc:latest
+    command:
+      - /cdc
+      - "server"
+      - "--pd=http://pd:2379"
+      - "--data-dir=/data/ticdc"
+    depends_on:
+      - pd
+      - tidb
+      - kafka
+    ports:
+      - "8300:8300"
+    volumes:
+      - ticdc_data:/data/ticdc
+
+
+
+
+
+
+
+
 
 
 
@@ -73,5 +142,6 @@ services:
 
 
 volumes:
-  tidb_data:
-
+  pd_data:
+  tikv_data:
+  ticdc_data:
