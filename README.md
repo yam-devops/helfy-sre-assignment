@@ -59,8 +59,8 @@ chmod +x db/init-db.sh init.sh
 
 ### Docker compose
 
-the compose file start the backend, frontend, kafka, consumer and the itdb services including the CDC neccessary components.
-- The itdb has an init container that waits for the itdb to load and then runs a bash script to create the required database, tables for users and tokens, and a deafult user with the credentials.
+the compose file start the backend, frontend, kafka, consumer and the tidb services including the CDC neccessary components.
+- The TiDB has an init container that waits for the Tidb to load and then runs a bash script to create the required database, tables for users and tokens, and a deafult user with the credentials.
 
 ```txt
 "email": "user@example.com", "password": "pass123"
@@ -90,6 +90,10 @@ A node.js app that logs database changes through messages receviced from Kafka
 
 receives DB changes meesages from TiDB
 
+### TiDB
+
+SQL Database to save users and tokens
+includes CDC to log database changes
 
 ---
 
