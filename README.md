@@ -108,7 +108,7 @@ After running
 
 for example
 ```
-		{
+{
   "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJ1c2VyQGV4YW1wbGUuY29tIiwiaWF0IjoxNzU0MzQ2NTg1LCJleHAiOjE3NTQzNTAxODV9.Zndy9J65mCcsoqjJF1j2NVIeLqS8t6KR9Df2M6iAB1w"
 }
 Profile:
