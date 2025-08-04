@@ -104,7 +104,7 @@ curl -X POST http://localhost:3000/login \
 ---
 # CleanUp
 ```
-docker-compose down
+docker compose down
 ```
 
 
