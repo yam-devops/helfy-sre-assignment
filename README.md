@@ -4,7 +4,7 @@
 ```
 sre-assignment/
 ├── docker-compose.yml          # Main orchestration file
-│── index.html               # System init script
+│── init.sh               # System init script
 ├── server/                    # Node.js API service
 │   ├── Dockerfile
 │   ├── package.json
