@@ -4,7 +4,7 @@
 ```
 sre-assignment/
 ├── docker-compose.yml          # Main orchestration file
-│
+│── index.html               # System init script
 ├── server/                    # Node.js API service
 │   ├── Dockerfile
 │   ├── package.json
@@ -40,13 +40,13 @@ sre-assignment/
 git clone https://github.com/yam-devops/helfy-sre-assignment.git
 cd helfy-sre-assignment
 
-# 2. Make script executable
-chmod +x db/init-db.sh
+# 2. Make scripts executable
+chmod +x db/init-db.sh init.sh
 
 
 # 3. run the project
 
-docker-compose up --build
+./init.sh
 
 ```
 4. Access the Application
@@ -59,31 +59,48 @@ docker-compose up --build
 
 ### Docker compose
 
-the compose file start the backend, frontend, kafka, consumer and the itdb services.
+the compose file start the backend, frontend, kafka, consumer and the itdb services including the CDC neccessary components.
 - The itdb has an init container that waits for the itdb to load and then runs a bash script to create the required database, tables for users and tokens, and a deafult user with the credentials.
+
 ```txt
 "email": "user@example.com", "password": "pass123"
 ```
 
+then through the init script, it exec into the itcdc container to configure the changefeed to sink to kafka
+
+```bash
+docker exec -it helfy-ticdc-1 /cdc cli changefeed create   --pd=http://pd:2379   --sink-uri="kafka://kafka:9092/tidb_cdc?protocol=canal-json"   --changefeed-id="kafka"
+```
+
 ### Client
 
-A static index.html is served by an Nginx container. It contains JavaScript that makes requests to the Flask API.
+A static index.html is served by an Nginx container to sends requests to the backend.
 
 Path: /client/index.html
 
 ### API
 
-A simple Flask app that responds with JSON.
+A node.js app that integrates with the DB and frontend through RestAPI
+
+### Consumer
+
+A node.js app that logs database changes through messages receviced from Kafka
+
+### Kafka
+
+receives DB changes meesages from TiDB
+
 
 ---
 
 
 ## Example
 
-After running ```docker compose up --build ```
-1. access localhost:8080
+After running 
+```./init.sh ```
+1. access http://localhost:8080
 2. enter the credentails ``` "email": "user@example.com", "password": "pass123" ```
-3. you will get a token as a response from the itdb database
+3. you will get a token as a response from the tidb database
 
 - You can also inspect the logs of the containers to see the logs of the requests and to troubleshoot
 
@@ -104,10 +121,32 @@ curl -X POST http://localhost:3000/login \
 ``` bash
 docker exec -it helfy-kafka-1 bash
 kafka-topics --bootstrap-server localhost:9092 --list
+
+#see messages received from TiCDC
+
+kafka-console-consumer --bootstrap-server localhost:9092 --topic  tidb_cdc
+
+```
+
+- See console logs of consumer
+```bash
+docker logs helfy-consumer-1
+```
+
+- Enter TiDB to look at data
+```bash
+
+mysql -h 127.0.0.1 -P 4000 -u root
+```
+
+```sql
+SHOW databases;
+use app;
+SHOW tables;
 ```
 ---
 # CleanUp
 ```
-docker compose down
+docker compose down -v
 ```
 
