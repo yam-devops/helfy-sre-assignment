@@ -102,6 +102,18 @@ After running
 2. enter the credentails ``` "email": "user@example.com", "password": "pass123" ```
 3. you will get a token as a response from the tidb database
 
+for example
+```
+		{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJ1c2VyQGV4YW1wbGUuY29tIiwiaWF0IjoxNzU0MzQ2NTg1LCJleHAiOjE3NTQzNTAxODV9.Zndy9J65mCcsoqjJF1j2NVIeLqS8t6KR9Df2M6iAB1w"
+}
+Profile:
+{
+  "id": 1,
+  "email": "user@example.com"
+}
+```
+
 - You can also inspect the logs of the containers to see the logs of the requests and to troubleshoot
 
 ```
