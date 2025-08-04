@@ -149,6 +149,12 @@ kafka-console-consumer --bootstrap-server localhost:9092 --topic  tidb_cdc
 docker logs helfy-consumer-1
 ```
 
+for the defaukt user you will see something like:
+```bash
+[2025-08-04T22:58:27.511] [INFO] default - {"timestamp":"2025-08-04T22:58:27.511Z","topic":"tidb_cdc","partition":0,"offset":"3","key":"","value":"{\"id\":0,\"database\":\"app\",\"table\":\"users\",\"pkNames\":[\"id\"],\"isDdl\":false,\"type\":\"INSERT\",\"es\":1754348302899,\"ts\":1754348305814,\"sql\":\"\",\"sqlType\":{\"id\":4,\"email\":12,\"password\":12},\"mysqlType\":{\"id\":\"int\",\"email\":\"varchar\",\"password\":\"varchar\"},\"old\":null,\"data\":[{\"id\":\"1\",\"email\":\"user@example.com\",\"password\":\"pass123\"}]}"}
+
+```
+
 - Enter TiDB to look at data
 ```bash
 
