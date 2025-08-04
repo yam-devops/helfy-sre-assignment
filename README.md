@@ -77,13 +77,6 @@ A simple Flask app that responds with JSON.
 
 ---
 
-## Communication
-
-The frontend sends requests like:
-
-fetch("http://localhost:3000/login")
-
----
 
 ## Example
 
